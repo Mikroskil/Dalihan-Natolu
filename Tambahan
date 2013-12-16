@@ -1,0 +1,81 @@
+//create an application with the Button component
+	function clicked(){
+    		trace("You clicked the button!");
+	}
+	my_button.addEventListener("click", clicked);
+
+//create a Button
+	this.createClassObject(mx.controls.Button, "my_button", 10, {label:"Click me"});
+	my_button.move(20, 20);
+	function clicked() {
+    		trace("You clicked the button!");
+	}
+	my_button.addEventListener("click", clicked);
+
+//attach a sound to a timeline
+	var song_sound:Sound = new Sound();
+	song_sound.attachSound("a_thousand_ways");
+	play_btn.onRelease = function() {
+    		song_sound.start();
+	};
+	stop_btn.onRelease = function() {
+    		song_sound.stop();
+	};
+	
+//create a sliding volume control
+	this.createTextField("volume_txt", 10, 30, 30, 200, 20);
+	volume_mc.top = volume_mc._y;
+	volume_mc.bottom = volume_mc._y;
+	volume_mc.left = volume_mc._x;
+	volume_mc.right = volume_mc._x + 100;
+	volume_mc._x += 100;
+
+	volume_mc.handle_btn.onPress = function() {
+    		startDrag(this._parent, false, this._parent.left, this._parent.top, this._parent.right, this._parent.bottom);
+	};
+	volume_mc.handle_btn.onRelease = function() {
+    		stopDrag();
+    		var level:Number = Math.ceil(this._parent._x - this._parent.left);
+    		this._parent._parent.song_sound.setVolume(level);
+    		this._parent._parent.volume_txt.text = level;
+	};
+	volume_mc.handle_btn.onReleaseOutside = slider_mc.handle_btn.onRelease;
+
+//create an application with the Menu component
+	/*
+ 	 Requires:
+	- Menu component in library
+	- Button component in library
+	*/
+
+	import mx.controls.Button;
+	import mx.controls.Menu;
+
+	this.createClassObject(Button, "menu_button", 10, {label:"Launch Menu"});
+
+	// Create a menu.
+	var my_menu:Menu = Menu.createMenu();
+
+	// Add some menu items.
+	my_menu.addMenuItem("Open");
+	my_menu.addMenuItem("Close");
+	my_menu.addMenuItem("Save");
+	my_menu.addMenuItem("Revert");
+
+	// Add a change-listener to Menu to detect which menu item is selected.
+	var menuListener:Object = new Object();
+	menuListener.change = function(evt_obj:Object) {
+	 var item_obj:Object = evt_obj.menuItem;
+	 trace("Item selected: "+item_obj.attributes.label);
+	};
+	my_menu.addEventListener("change", menuListener);
+	
+	// Add a button listener that displays the menu when the button is clicked.
+	var buttonListener:Object = new Object();
+	buttonListener.click = function(evt_obj:Object) {
+	 var my_button:Button = evt_obj.target;
+	 // Display the menu at the bottom of the button.
+	 my_menu.show(my_button.x, my_button.y + my_button.height);
+	};
+	menu_button.addEventListener("click", buttonListener);
+
